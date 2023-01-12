@@ -22,25 +22,23 @@ length = len(df)
 
 # create a for loop to iterate through the dataframe
 for i in range(0, length):
-    # if the stock price is greater than the 60 day moving average and the previous day's stock price was less than the 60 day moving average, then buy the stock
-    if df['Adj Close'][i] > df['60 Day MA'][i] and df['Adj Close'][i-1] < df['60 Day MA'][i-1]:
+    # if the stock price is greater than the 60 day moving average for 2 consecutive days, then buy the stock
+    if df['Adj Close'][i] > df['60 Day MA'][i] and df['Adj Close'][i-1] > df['60 Day MA'][i-1]:
         df['Buy_Signal_Price'][i] = df['Adj Close'][i]
-    # if the stock price is less than the 60 day moving average and the previous day's stock price was greater than the 60 day moving average, then sell the stock
-    elif df['Adj Close'][i] < df['60 Day MA'][i] and df['Adj Close'][i-1] > df['60 Day MA'][i-1]:
+
+    # if the stock price is less than the 60 day moving average for 2 consecutive days, then sell the stock
+    elif df['Adj Close'][i] < df['60 Day MA'][i] and df['Adj Close'][i-1] < df['60 Day MA'][i-1]:
         df['Sell_Signal_Price'][i] = df['Adj Close'][i]
 
-
-print(df)
 # create a variable to store the total profit/loss
 total_profit_loss = 0
 
-# calculate the total profit/loss
+# calculate the total profit/loss assuming that you bought 1 share of the stock at the buy price and sold 1 share of the stock at the sell price
 for i in range(0, length):
     if df['Buy_Signal_Price'][i] > 0:
         total_profit_loss -= df['Buy_Signal_Price'][i]
     elif df['Sell_Signal_Price'][i] > 0:
         total_profit_loss += df['Sell_Signal_Price'][i]
-
 
 # print the total profit/loss
 print('Total Profit/Loss: $', total_profit_loss)
@@ -69,14 +67,14 @@ plt.savefig('AAPL.png')
 # save the dataframe as a csv file
 df.to_csv('AAPL.csv')
 
-# # save the dataframe as an excel file
-# df.to_excel('AAPL.xlsx')
+# save the dataframe as an excel file
+df.to_excel('AAPL.xlsx')
 
-# # save the dataframe as a json file
-# df.to_json('AAPL.json')
+# save the dataframe as a json file
+df.to_json('AAPL.json')
 
-# # save the dataframe as a html file
-# df.to_html('AAPL.html')
+# save the dataframe as a html file
+df.to_html('AAPL.html')
 
 
 # Path: main.py
